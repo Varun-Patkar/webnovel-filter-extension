@@ -1,0 +1,63 @@
+{
+  "manifest_version": 3,
+  "name": "Webnovel Advanced Filter",
+  "version": "0.1.0",
+  "description": "Injects an advanced client-side filter bar (chapters, rating, tags, read status, and more) into Webnovel tag, search and ranking pages, and widens the layout for ultrawide screens.",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://www.webnovel.com/*"
+  ],
+  "action": {
+    "default_title": "Webnovel Advanced Filter",
+    "default_popup": "src/popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.webnovel.com/tags/*",
+        "https://www.webnovel.com/search*",
+        "https://www.webnovel.com/ranking/*"
+      ],
+      "run_at": "document_start",
+      "world": "MAIN",
+      "js": [
+        "src/content/nethook.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://www.webnovel.com/tags/*",
+        "https://www.webnovel.com/search*",
+        "https://www.webnovel.com/ranking/*"
+      ],
+      "run_at": "document_idle",
+      "css": [
+        "src/styles/panel.css"
+      ],
+      "js": [
+        "src/lib/queue.js",
+        "src/content/store.js",
+        "src/content/pagectx.js",
+        "src/content/api.js",
+        "src/content/cards.js",
+        "src/content/filters.js",
+        "src/content/layout.js",
+        "src/content/taglazy.js",
+        "src/content/ui/panel.js",
+        "src/content/main.js"
+      ]
+    }
+  ]
+}

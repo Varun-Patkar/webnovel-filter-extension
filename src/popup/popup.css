@@ -1,0 +1,107 @@
+/* popup.css — styling for the toolbar popup, matching the extension's
+   distinct indigo accent. */
+:root {
+  --accent: #6366f1;
+  --accent-2: #8b5cf6;
+  --bg: #1e1b2e;
+  --bg-2: #2a2540;
+  --text: #ece9f7;
+  --muted: #a29fb8;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  width: 260px;
+  margin: 0;
+  padding: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+.hdr {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+}
+.title {
+  font-weight: 800;
+  font-size: 15px;
+}
+.sub {
+  font-size: 11px;
+  color: var(--muted);
+}
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-2);
+  border: 1px solid #443f63;
+  border-radius: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+.row-label {
+  font-weight: 700;
+  font-size: 13px;
+}
+
+/* toggle switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  inset: 0;
+  background: #4b4660;
+  border-radius: 999px;
+  transition: background 0.2s;
+}
+.slider::before {
+  content: "";
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  top: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+.switch input:checked + .slider {
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+}
+.switch input:checked + .slider::before {
+  transform: translateX(20px);
+}
+
+.status {
+  margin: 10px 2px 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent-2);
+}
+.hint {
+  margin: 12px 2px 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.hint b {
+  color: var(--text);
+}

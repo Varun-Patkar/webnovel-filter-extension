@@ -1,0 +1,10 @@
+# Playwright MCP scratch output (screenshots, snapshots, console logs)
+.playwright-mcp/
+
+# Temporary icon render preview
+icons/_preview.png
+
+# OS / editor cruft
+Thumbs.db
+.DS_Store
+*.log

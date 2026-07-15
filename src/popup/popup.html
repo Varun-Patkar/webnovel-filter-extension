@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!--
+  popup.html
+  ----------
+  Small toolbar popup with a single master on/off switch for the extension.
+  State is persisted in chrome.storage.local under `enabled`; the content
+  script watches for changes and mounts/tears down live (no reload needed).
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="hdr">
+      <img src="../../icons/icon48.png" alt="" class="logo" />
+      <div class="titles">
+        <div class="title">Webnovel Filter</div>
+        <div class="sub">Advanced filters &amp; wide layout</div>
+      </div>
+    </div>
+
+    <label class="row">
+      <span class="row-label">Enabled</span>
+      <span class="switch">
+        <input type="checkbox" id="toggle" />
+        <span class="slider"></span>
+      </span>
+    </label>
+
+    <p class="status" id="status">On</p>
+
+    <p class="hint">
+      Works on Webnovel <b>tag</b>, <b>search</b> and <b>ranking</b> pages.
+      Open the <b>⚙ Advanced Filters</b> bar on those pages to filter, and use
+      <b>⇔ Wide</b> for the ultrawide layout.
+    </p>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

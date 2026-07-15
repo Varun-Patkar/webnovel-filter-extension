@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!--
+  icon-source.html
+  ----------------
+  Source used to render the extension's PNG icons (icons/icon16|48|128.png).
+  A funnel (filter) mark over a book spine, on the extension's indigo accent.
+  Rendered offscreen and screenshotted per size during development; kept in
+  the repo so the icons can be regenerated.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body { margin: 0; padding: 24px; background: transparent; display: flex; gap: 24px; align-items: flex-end; }
+      .box { image-rendering: auto; }
+      #i16 { width: 16px; height: 16px; }
+      #i48 { width: 48px; height: 48px; }
+      #i128 { width: 128px; height: 128px; }
+    </style>
+  </head>
+  <body>
+    <div class="box" id="i16"></div>
+    <div class="box" id="i48"></div>
+    <div class="box" id="i128"></div>
+
+    <template id="tpl">
+      <svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#6d68f2" />
+            <stop offset="1" stop-color="#9333ea" />
+          </linearGradient>
+        </defs>
+        <!-- rounded app tile -->
+        <rect x="4" y="4" width="120" height="120" rx="28" fill="url(#g)" />
+        <!-- three "list" lines being filtered (decreasing width, centered) -->
+        <rect x="40" y="30" width="48" height="8" rx="4" fill="#ffffff" opacity="0.9" />
+        <rect x="48" y="46" width="32" height="8" rx="4" fill="#ffffff" opacity="0.6" />
+        <!-- symmetric funnel mark -->
+        <path
+          d="M34 66 H94 L72 90 V104 H56 V90 Z"
+          fill="#ffffff"
+          stroke="#ffffff"
+          stroke-width="4"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </template>
+
+    <script>
+      const svg = document.getElementById("tpl").innerHTML;
+      for (const id of ["i16", "i48", "i128"]) {
+        document.getElementById(id).innerHTML = svg;
+      }
+    </script>
+  </body>
+</html>

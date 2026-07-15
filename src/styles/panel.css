@@ -1,0 +1,329 @@
+/*
+ * panel.css
+ * ----------
+ * Styles for the injected filter bar/panel, the per-card metadata badges,
+ * and the optional "wide mode" layout overrides. Everything is namespaced
+ * under .wnf-* / html.wnf-wide so it cannot leak into Webnovel's own styles.
+ *
+ * Visual language: a distinct indigo accent so it's obvious this is the
+ * extension and not part of the native site.
+ */
+
+:root {
+  --wnf-accent: #6366f1;
+  --wnf-accent-2: #8b5cf6;
+  --wnf-bg: #1e1b2e;
+  --wnf-bg-2: #2a2540;
+  --wnf-text: #ece9f7;
+  --wnf-muted: #a29fb8;
+  --wnf-danger: #ef4444;
+}
+
+/* ---- container + sticky bar ---- */
+.wnf-root {
+  margin: 0 0 16px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+.wnf-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px 14px;
+  background: linear-gradient(90deg, var(--wnf-accent), var(--wnf-accent-2));
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.35);
+  color: #fff;
+}
+
+.wnf-brand {
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  font-size: 14px;
+  margin-right: 4px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+.wnf-count {
+  margin-left: auto;
+  font-size: 13px;
+  color: #fff;
+  opacity: 0.95;
+}
+.wnf-count b {
+  font-weight: 800;
+}
+.wnf-c-hide {
+  color: #ffe08a;
+}
+
+/* ---- buttons ---- */
+.wnf-btn {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.05s;
+}
+.wnf-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+.wnf-btn:active {
+  transform: translateY(1px);
+}
+.wnf-btn.wnf-active {
+  background: #fff;
+  color: var(--wnf-accent);
+}
+
+/* ---- collapsible panel ---- */
+.wnf-panel {
+  display: none;
+  background: var(--wnf-bg);
+  color: var(--wnf-text);
+  border: 1px solid var(--wnf-accent);
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  padding: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+.wnf-panel.wnf-open {
+  display: block;
+}
+
+.wnf-row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.wnf-row:last-child {
+  margin-bottom: 0;
+}
+
+.wnf-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--wnf-muted);
+}
+.wnf-field > span {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  font-size: 11px;
+}
+.wnf-grow {
+  flex: 1 1 100%;
+}
+
+.wnf-num,
+.wnf-text,
+.wnf-select {
+  background: var(--wnf-bg-2);
+  border: 1px solid #443f63;
+  color: var(--wnf-text);
+  border-radius: 7px;
+  padding: 7px 9px;
+  font-size: 13px;
+  outline: none;
+}
+.wnf-num {
+  width: 110px;
+}
+.wnf-text {
+  width: 100%;
+}
+.wnf-num:focus,
+.wnf-text:focus,
+.wnf-select:focus {
+  border-color: var(--wnf-accent);
+}
+
+.wnf-inline {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* chips (checkbox pills) */
+.wnf-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  max-height: 120px;
+  overflow: auto;
+}
+.wnf-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--wnf-bg-2);
+  border: 1px solid #443f63;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+  color: var(--wnf-text);
+  cursor: pointer;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.wnf-chip input {
+  accent-color: var(--wnf-accent);
+}
+
+/* tag tri-state buttons */
+.wnf-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  max-height: 160px;
+  overflow: auto;
+  margin-top: 6px;
+}
+.wnf-tag {
+  border: 1px solid #443f63;
+  background: var(--wnf-bg-2);
+  color: var(--wnf-muted);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+}
+.wnf-tag-inc {
+  background: rgba(99, 102, 241, 0.25);
+  border-color: var(--wnf-accent);
+  color: #c7d2fe;
+}
+.wnf-tag-exc {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: var(--wnf-danger);
+  color: #fecaca;
+}
+.wnf-muted {
+  color: var(--wnf-muted);
+  font-size: 12px;
+}
+
+/* ---- per-card metadata badges ---- */
+.wnf-badge {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 6px 0 2px;
+}
+.wnf-b {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.4;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgba(99, 102, 241, 0.14);
+  color: #4f46e5;
+  border: 1px solid rgba(99, 102, 241, 0.35);
+}
+.wnf-b-ch {
+  background: rgba(99, 102, 241, 0.9);
+  color: #fff;
+  border-color: transparent;
+}
+.wnf-b-star {
+  background: rgba(245, 158, 11, 0.15);
+  color: #b45309;
+  border-color: rgba(245, 158, 11, 0.4);
+}
+.wnf-b-read {
+  background: rgba(16, 185, 129, 0.15);
+  color: #047857;
+  border-color: rgba(16, 185, 129, 0.4);
+}
+.wnf-b-lib {
+  background: rgba(236, 72, 153, 0.15);
+  color: #be185d;
+  border-color: rgba(236, 72, 153, 0.4);
+}
+.wnf-b-err {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--wnf-danger);
+  border-color: rgba(239, 68, 68, 0.4);
+}
+.wnf-badge-loading .wnf-b {
+  opacity: 0.6;
+}
+
+/* ---- filtered-out cards ---- */
+.wnf-hidden {
+  display: none !important;
+}
+
+/* =====================================================================
+ * WIDE MODE — expand content to ~90vw and pack cards across the available
+ * width. Selectors are scoped by the per-page class (wnf-page-*) that
+ * main.js adds to <html>, so widening one page type never disturbs another
+ * (or the shared navbar). Verified against the live 2026-07 markup.
+ * ===================================================================== */
+
+/* --- Tag pages: the results grid <ul.g_row> is itself the narrow, centered
+ *     column (its full-width parent .j_bookList is fine). Expand the parent
+ *     to 90vw and convert the 2-per-row grid into an auto-fit grid. --- */
+html.wnf-wide.wnf-page-tag .j_bookList {
+  width: 90vw !important;
+  max-width: 90vw !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box;
+}
+html.wnf-wide.wnf-page-tag ul.g_row {
+  width: auto !important;
+  max-width: none !important;
+  margin: 0 !important;
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important;
+  gap: 20px !important;
+}
+html.wnf-wide.wnf-page-tag ul.g_row > li.g_col {
+  width: auto !important;
+  max-width: none !important;
+  float: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* --- Search pages: .ser-wrap is the centered narrow column. Expand it and
+ *     pack the result rows into responsive columns. --- */
+html.wnf-wide.wnf-page-search .ser-wrap {
+  width: 90vw !important;
+  max-width: 90vw !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box;
+}
+html.wnf-wide.wnf-page-search ul.j_result_wrap {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(520px, 1fr)) !important;
+  gap: 4px 28px !important;
+}
+
+/* --- Ranking pages: widen the flex content wrapper (.g_wrap.df holds the
+ *     rank list + sidebar); the rows then use the extra width. --- */
+html.wnf-wide.wnf-page-ranking .g_wrap.df {
+  width: 90vw !important;
+  max-width: 90vw !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box;
+}
