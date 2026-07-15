@@ -4,6 +4,10 @@
 # Temporary icon render preview
 icons/_preview.png
 
+# Build / packaging output
+dist/
+*.zip
+
 # OS / editor cruft
 Thumbs.db
 .DS_Store
