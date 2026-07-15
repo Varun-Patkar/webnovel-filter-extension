@@ -19,6 +19,13 @@
   // Limit concurrent detail requests so we stay gentle on Webnovel's servers.
   const queue = WNF.createQueue(4);
 
+  // Count of per-book detail fetches still in flight. Drives the bar's "busy"
+  // spinner so the user knows the filtered counts are still settling.
+  function bumpBusy(delta) {
+    store.pending = Math.max(0, store.pending + delta);
+    store.emit("progress");
+  }
+
   /** Format a large number compactly, e.g. 2913013 -> "2.9M". */
   function compact(n) {
     if (n == null) return "?";
@@ -130,6 +137,7 @@
     store.meta.set(bookId, Object.assign({}, prev, { bookId, status: "loading" }));
     if (!el.querySelector(":scope .wnf-badge")) drawLoading(el);
 
+    bumpBusy(1);
     queue
       .add(() => WNF.api.fetchBookMeta(bookId))
       .then((meta) => {
@@ -153,7 +161,8 @@
           if (b) b.innerHTML = '<span class="wnf-b wnf-b-err">⚠</span>';
         }
         console.warn("[WNF] detail fetch failed", bookId, err.message);
-      });
+      })
+      .finally(() => bumpBusy(-1));
   }
 
   /** Apply the enrichment policy for one card. */

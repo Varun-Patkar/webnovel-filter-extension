@@ -20,7 +20,9 @@ nothing is crawled or stored on an external server.
   - **Read status** — unread / in progress / read (uses your logged-in data)
   - **In library** / not in library
   - **Sort** by chapters, rating, or views
-- **Live counts**: how many are shown, filtered out, and loaded.
+- **Live counts**: how many are shown, filtered out, and loaded — with an
+  **“Updating…” spinner** while background data is still loading, so you know
+  when the totals are final.
 - **Clear Filters** button. Filters are intentionally **forgotten on reload**.
 - **Chapter badges** on every card — the number you normally have to open each
   book to see.

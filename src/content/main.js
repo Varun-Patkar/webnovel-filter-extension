@@ -68,6 +68,7 @@
 
     unsubscribe = store.subscribe((reason) => {
       if (reason === "cards" || reason === "meta") scheduleRefresh();
+      if (reason === "progress") WNF.ui.setBusy(store.pending);
     });
 
     WNF.ui.mount(anchor);

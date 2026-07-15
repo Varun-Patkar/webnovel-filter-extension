@@ -70,6 +70,12 @@
     syncWidth();
   }
 
+  /** Show or hide the "updating" spinner based on outstanding detail fetches. */
+  function setBusy(pending) {
+    if (!refs.busy) return;
+    refs.busy.style.display = pending > 0 ? "" : "none";
+  }
+
   /** Run the filter pass and update the count readout. */
   function applyAndCount() {
     const { showing, hidden, total } = WNF.filters.apply();
@@ -296,6 +302,13 @@
     if (document.querySelector(".wnf-bar")) return; // already mounted
 
     refs.count = h("span.wnf-count");
+    refs.busy = h(
+      "span.wnf-busy",
+      { title: "Updating results as data loads…" },
+      h("span.wnf-spinner"),
+      h("span", { text: "Updating…" })
+    );
+    refs.busy.style.display = "none";
 
     const toggleBtn = h("button.wnf-btn", {
       type: "button",
@@ -335,7 +348,8 @@
       toggleBtn,
       wideBtn,
       clearBtn,
-      refs.count
+      refs.count,
+      refs.busy
     );
 
     refs.panel = buildPanel();
@@ -370,5 +384,5 @@
     applyAndCount();
   }
 
-  WNF.ui = { mount, refresh, applyAndCount };
+  WNF.ui = { mount, refresh, applyAndCount, setBusy };
 })();

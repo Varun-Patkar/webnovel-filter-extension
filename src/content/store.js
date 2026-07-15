@@ -44,6 +44,8 @@
     page: null,
     /** @type {boolean} when true (tag pages) bulk metadata is authoritative */
     bulkMode: false,
+    /** @type {number} outstanding per-book detail fetches (drives the busy spinner) */
+    pending: 0,
     /** @type {Set<Function>} change listeners */
     _listeners: new Set(),
 

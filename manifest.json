@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Webnovel Advanced Filter",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Injects an advanced client-side filter bar (chapters, rating, tags, read status, and more) into Webnovel tag, search and ranking pages, and widens the layout for ultrawide screens.",
   "permissions": [
     "storage"
