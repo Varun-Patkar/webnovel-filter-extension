@@ -153,6 +153,27 @@
     return r.top < window.innerHeight + 600;
   }
 
+  /**
+   * Whether any filter is currently narrowing the results. When true we stop
+   * auto-loading pages: filters apply to whatever is already loaded and must
+   * never trigger fetching more (that caused the endless "keep loading").
+   */
+  function anyFilterActive() {
+    const f = store.filters;
+    return !!(
+      f.text ||
+      f.minChapters != null ||
+      f.maxChapters != null ||
+      f.minRating != null ||
+      f.minViews != null ||
+      f.includeTags.size ||
+      f.excludeTags.size ||
+      f.categories.size ||
+      f.readStatus.size ||
+      f.inLibrary !== "any"
+    );
+  }
+
   /** Build the getTagBookList URL for a given page index. */
   function pageUrl(pageIndex) {
     return (
@@ -227,15 +248,19 @@
     } finally {
       state.loading = false;
     }
-    // Auto-load only until the visible (unfiltered) results roughly fill the
-    // screen, and cap the burst so an aggressive filter with few matches can't
-    // runaway-load the whole tag. Scrolling to the sentinel starts a fresh burst.
-    if (ok && !state.done && state.sentinel && nearViewport(state.sentinel)) {
-      const visible = document.querySelectorAll(
-        "ul.g_row > li:not(.wnf-hidden)"
-      ).length;
+    // Auto-load more only to fill the viewport during normal (unfiltered)
+    // browsing. If a filter is active we stop entirely — filters apply to the
+    // already-loaded books and must not pull in more pages. A capped burst
+    // prevents runaway; scrolling to the sentinel starts a fresh burst.
+    if (
+      ok &&
+      !state.done &&
+      state.sentinel &&
+      nearViewport(state.sentinel) &&
+      !anyFilterActive()
+    ) {
       state.burst = (state.burst || 0) + 1;
-      if (visible < 30 && state.burst < 8) requestAnimationFrame(loadNext);
+      if (state.burst < 8) requestAnimationFrame(loadNext);
     }
   }
 
@@ -283,7 +308,9 @@
     state.sentinel = sentinel;
     state.observer = new IntersectionObserver(
       (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
+        // Only load while browsing unfiltered. With a filter active we leave the
+        // loaded set as-is so filtering never triggers more fetching.
+        if (entries.some((e) => e.isIntersecting) && !anyFilterActive()) {
           state.burst = 0; // user reached the sentinel; allow a fresh auto-load run
           loadNext();
         }
