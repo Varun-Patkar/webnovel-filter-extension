@@ -216,6 +216,7 @@
         if (json.data.isLast || items.length < PAGE_SIZE) state.done = true;
         WNF.cards.mergeBulk(items); // feed bulk metadata (chapters/rating/tags)
         WNF.cards.scan(); // discover + enrich the new cards
+        WNF.filters.apply(); // hide non-matching cards now so the visible count below is accurate
         ok = true;
       } else {
         state.done = true;
@@ -226,8 +227,15 @@
     } finally {
       state.loading = false;
     }
+    // Auto-load only until the visible (unfiltered) results roughly fill the
+    // screen, and cap the burst so an aggressive filter with few matches can't
+    // runaway-load the whole tag. Scrolling to the sentinel starts a fresh burst.
     if (ok && !state.done && state.sentinel && nearViewport(state.sentinel)) {
-      requestAnimationFrame(loadNext);
+      const visible = document.querySelectorAll(
+        "ul.g_row > li:not(.wnf-hidden)"
+      ).length;
+      state.burst = (state.burst || 0) + 1;
+      if (visible < 30 && state.burst < 8) requestAnimationFrame(loadNext);
     }
   }
 
@@ -264,6 +272,7 @@
       pageIndex: Math.floor(existing / PAGE_SIZE) + 1,
       loading: false,
       done: false,
+      burst: 0,
     });
 
     // Bottom sentinel + observer to trigger loads before the user hits the end.
@@ -274,7 +283,10 @@
     state.sentinel = sentinel;
     state.observer = new IntersectionObserver(
       (entries) => {
-        if (entries.some((e) => e.isIntersecting)) loadNext();
+        if (entries.some((e) => e.isIntersecting)) {
+          state.burst = 0; // user reached the sentinel; allow a fresh auto-load run
+          loadNext();
+        }
       },
       { rootMargin: "600px" }
     );

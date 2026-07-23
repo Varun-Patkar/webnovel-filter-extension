@@ -21,11 +21,17 @@
    * @returns {boolean}
    */
   function passes(meta, f) {
-    const loaded = meta && meta.status === "done";
+    // "has" = we have usable metadata, whether full ("done") or bulk
+    // ("partial"). Tag-page cards are usually partial but already carry
+    // name / chapters / rating / tags / category, so filters must accept them.
+    // Field-level null checks below hide a card for the specific fields a
+    // partial record lacks (views / read status / in-library) until its
+    // per-book detail arrives.
+    const has = meta && (meta.status === "done" || meta.status === "partial");
 
-    // Text search — needs loaded metadata to match against.
+    // Text search.
     if (f.text) {
-      if (!loaded) return false;
+      if (!has) return false;
       const hay = (
         meta.bookName +
         " " +
@@ -36,47 +42,47 @@
       if (!hay.includes(f.text.toLowerCase())) return false;
     }
 
-    // Numeric constraints require loaded data.
+    // Numeric constraints.
     if (f.minChapters != null) {
-      if (!loaded || meta.chapters == null || meta.chapters < f.minChapters)
+      if (!has || meta.chapters == null || meta.chapters < f.minChapters)
         return false;
     }
     if (f.maxChapters != null) {
-      if (!loaded || meta.chapters == null || meta.chapters > f.maxChapters)
+      if (!has || meta.chapters == null || meta.chapters > f.maxChapters)
         return false;
     }
     if (f.minRating != null) {
-      if (!loaded || meta.score == null || meta.score < f.minRating) return false;
+      if (!has || meta.score == null || meta.score < f.minRating) return false;
     }
     if (f.minViews != null) {
-      if (!loaded || meta.views == null || meta.views < f.minViews) return false;
+      if (!has || meta.views == null || meta.views < f.minViews) return false;
     }
 
     // Category (empty set = all).
     if (f.categories.size) {
-      if (!loaded || !f.categories.has(meta.categoryName)) return false;
+      if (!has || !f.categories.has(meta.categoryName)) return false;
     }
 
     // Tag include: every selected include-tag must be present.
     if (f.includeTags.size) {
-      if (!loaded) return false;
+      if (!has) return false;
       const tagSet = new Set(meta.tags);
       for (const t of f.includeTags) if (!tagSet.has(t)) return false;
     }
     // Tag exclude: none of the selected exclude-tags may be present.
-    if (f.excludeTags.size && loaded) {
+    if (f.excludeTags.size && has) {
       const tagSet = new Set(meta.tags);
       for (const t of f.excludeTags) if (tagSet.has(t)) return false;
     }
 
     // Read status (empty set = all).
     if (f.readStatus.size) {
-      if (!loaded || !f.readStatus.has(meta.readStatus)) return false;
+      if (!has || !f.readStatus.has(meta.readStatus)) return false;
     }
 
     // In-library tri-state.
     if (f.inLibrary !== "any") {
-      if (!loaded) return false;
+      if (!has) return false;
       if (f.inLibrary === "yes" && !meta.inLibrary) return false;
       if (f.inLibrary === "no" && meta.inLibrary) return false;
     }
@@ -86,7 +92,8 @@
 
   /** Numeric field accessor for sorting. */
   function sortValue(meta, key) {
-    if (!meta || meta.status !== "done") return -Infinity;
+    if (!meta || (meta.status !== "done" && meta.status !== "partial"))
+      return -Infinity;
     if (key === "chapters") return meta.chapters ?? -Infinity;
     if (key === "rating") return meta.score ?? -Infinity;
     if (key === "views") return meta.views ?? -Infinity;
