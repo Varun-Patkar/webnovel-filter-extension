@@ -100,7 +100,7 @@
   function collect(field) {
     const set = new Set();
     store.meta.forEach((m) => {
-      if (m.status !== "done") return;
+      if (m.status !== "done" && m.status !== "partial") return;
       if (field === "tags") m.tags.forEach((t) => set.add(t));
       else if (m[field]) set.add(m[field]);
     });
