@@ -1,0 +1,42 @@
+/**
+ * wide.css
+ * ---------
+ * Site-wide "wide mode" overrides, injected on EVERY Webnovel page and gated
+ * by the `html.wnf-wide` class that wide.js sets from the persisted popup
+ * switch. The goal is to reclaim the wasted horizontal space on large screens
+ * while never exceeding 90vw (leaving ~5vw breathing room on each side) so no
+ * page overflows or breaks its own layout.
+ *
+ * `.g_wrap` / `.g_row` are Webnovel's standard fixed-width (~1000px) centered
+ * layout wrappers used across the whole site (home, book detail, category,
+ * etc.). Both are widened together so a nested `.g_wrap` never overflows its
+ * `.g_row` parent. The chapter reader uses its own column (`#page.cha-page`
+ * with an inner `.cha-page-in`), so it gets a dedicated rule. Verified live
+ * against the 2026-08 markup on home, book-detail and chapter pages.
+ *
+ * Page-type-specific grid packing for the filter pages (tag/search/ranking)
+ * lives in panel.css, which only loads on those pages and whose more specific
+ * selectors win over the generic rules below; this file handles everything
+ * else site-wide.
+ */
+
+/* Generic fixed-width content wrappers — the common case across the site. */
+html.wnf-wide .g_wrap,
+html.wnf-wide .g_row {
+  width: 90vw !important;
+  max-width: 90vw !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+
+/* Chapter reader — widen the reading column (and its inner shell) so the story
+ * text fills the page too, still capped at 90vw so nothing overflows. */
+html.wnf-wide #page.cha-page,
+html.wnf-wide .cha-page-in {
+  width: 90vw !important;
+  max-width: 90vw !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}

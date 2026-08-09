@@ -115,16 +115,12 @@
     document
       .querySelectorAll(".wnf-hidden")
       .forEach((n) => n.classList.remove("wnf-hidden"));
-    document.documentElement.classList.remove(
-      "wnf-wide",
-      "wnf-page-" + page.type
-    );
+    document.documentElement.classList.remove("wnf-page-" + page.type);
 
     // Reset in-memory state so a later re-enable starts clean.
     store.cards.length = 0;
     store.meta.clear();
     store.filters = store.defaultFilters();
-    if (WNF.layout) WNF.layout.setWide(false);
   }
 
   /**

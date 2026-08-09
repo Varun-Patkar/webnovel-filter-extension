@@ -319,18 +319,6 @@
       },
     });
 
-    const wideBtn = h("button.wnf-btn", {
-      type: "button",
-      text: "⇔ Wide",
-      title: "Expand content to ~90% of screen width",
-      onClick: () => {
-        WNF.layout.setWide(!WNF.layout.isWide());
-        wideBtn.classList.toggle("wnf-active", WNF.layout.isWide());
-        // Content width just changed; re-match after the layout settles.
-        requestAnimationFrame(syncWidth);
-      },
-    });
-
     const clearBtn = h("button.wnf-btn", {
       type: "button",
       text: "✕ Clear",
@@ -346,7 +334,6 @@
       null,
       h("span.wnf-brand", { text: "Webnovel Filter" }),
       toggleBtn,
-      wideBtn,
       clearBtn,
       refs.count,
       refs.busy

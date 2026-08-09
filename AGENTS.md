@@ -20,18 +20,27 @@ global but not lexical scope, so each file hangs its module off `__WNF`).
 | `src/content/api.js` | `get-book-detail` fetch + normalization; read-status mapping. |
 | `src/content/cards.js` | Discover cards, enqueue enrichment, draw metadata badges. |
 | `src/content/filters.js` | Filter predicate + sort + counts. |
-| `src/content/layout.js` | Wide-mode toggle (adds `html.wnf-wide`). |
+| `src/content/wide.js` | Site-wide wide-mode driver: injected on **all** Webnovel pages at `document_start`; reads/watches `storage.wide` and toggles `html.wnf-wide`. |
 | `src/content/taglazy.js` | Take-over lazy loader for tag pages (works around the site's broken renderer). |
 | `src/content/ui/panel.js` | Builds the bar/panel, owns the apply cycle. |
 | `src/content/main.js` | Orchestrator: detect → gate on `storage.enabled` → mount → scan → observe; supports live enable/disable teardown. |
-| `src/styles/panel.css` | UI + badge + wide-mode styles (namespaced `.wnf-*`). |
-| `src/popup/popup.{html,css,js}` | Toolbar popup: master on/off switch stored in `chrome.storage.local.enabled`. |
+| `src/styles/panel.css` | Filter UI + badge + per-page wide-mode grid styles (namespaced `.wnf-*`; loads only on tag/search/ranking). |
+| `src/styles/wide.css` | Site-wide wide-mode overrides (capped 90vw); loads on all pages, gated by `html.wnf-wide`. |
+| `src/popup/popup.{html,css,js}` | Toolbar popup: master on/off switch (`storage.enabled`) + persisted **Wide layout** switch (`storage.wide`). |
 | `icons/icon-source.html` | SVG source; rendered to `icons/icon{16,48,128}.png`. |
 
-Wide-mode CSS is scoped by a `wnf-page-{tag|search|ranking}` class that
-`main.js` adds to `<html>`. Verified widen targets: tag `.j_bookList` +
-`ul.g_row` grid; search `.ser-wrap` + `ul.j_result_wrap` grid; ranking
-`.g_wrap.df`. The `swapHref is not defined` EJS error some users see on tag
+Wide mode is a persisted, site-wide toggle. The **Wide layout** switch in the
+popup writes `chrome.storage.local.wide`; `wide.js` (injected on every
+`webnovel.com/*` page at `document_start`) toggles `html.wnf-wide` and lives
+independently of the filter enable/disable lifecycle. `wide.css` applies the
+general overrides everywhere, capped at 90vw (5vw margins): it widens Webnovel's
+standard fixed-width centered wrappers `.g_wrap` + `.g_row` (home, book detail,
+category, …) and the chapter reader column `#page.cha-page` + `.cha-page-in`, so
+no page overflows (verified live 2026-08 on home/book-detail/chapter). The
+filter pages additionally get per-page grid packing from `panel.css`, still
+scoped by the `wnf-page-{tag|search|ranking}` class `main.js` adds to `<html>`:
+tag `.j_bookList` + `ul.g_row` grid; search `.ser-wrap` + `ul.j_result_wrap`
+grid; ranking `.g_wrap.df`. The `swapHref is not defined` EJS error some users see on tag
 lazy-load is Webnovel's own bug (isolated-world content scripts cannot touch
 the site's template globals). We work around it in `taglazy.js`: on tag pages
 we fetch the next `getTagBookList` pages ourselves (novel=type1, fanfic=type4;

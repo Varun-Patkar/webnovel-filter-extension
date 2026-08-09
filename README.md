@@ -26,9 +26,11 @@ nothing is crawled or stored on an external server.
 - **Clear Filters** button. Filters are intentionally **forgotten on reload**.
 - **Chapter badges** on every card — the number you normally have to open each
   book to see.
-- **Wide mode** (`⇔ Wide`): expands content to ~90% of screen width and packs
-  tag-page and search cards into as many columns as fit, instead of the default
-  2-per-row.
+- **Wide mode**: a **Wide layout** switch in the toolbar popup that expands
+  every Webnovel page (including book detail and chapter pages) to ~90% of
+  screen width — leaving ~5% margin on each side — and packs tag-page and
+  search cards into as many columns as fit, instead of the default 2-per-row.
+  The setting is remembered until you switch it off.
 - **On/off toggle**: click the toolbar icon for a master switch. Toggling it
   mounts or removes the filter UI on open Webnovel tabs live, no reload needed.
 - **Fixes Webnovel's broken tag lazy-load**: on tag pages the site's own
