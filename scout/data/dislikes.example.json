@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "updatedAt": "YYYY-MM-DD",
+  "notes": "EXAMPLE template. Copy to scout/data/dislikes.json (gitignored). Hard-exclude rules plus growable per-book dislikes.",
+
+  "categories": ["Pure Romance", "CEO", "Horror", "Grimdark"],
+  "tags": ["romance-ceo", "horror"],
+
+  "softDislikeThemes": {
+    "note": "Rank these DOWN hard (not always a hard cut).",
+    "themes": ["slow burn", "angst", "grimdark / overly dark tone"]
+  },
+
+  "blNuance": "Describe your BL/yaoi/yuri stance here, e.g. exclude BL romance stories but allow pure-smut; yuri fine.",
+
+  "franchisesSetIn": {
+    "note": "Exclude books SET IN these worlds. A multiverse fic that only borrows powers or briefly visits is OK.",
+    "worlds": ["One Piece", "Genshin Impact"]
+  },
+
+  "keepDespiteHeuristics": ["Slice of Life", "Comics"],
+
+  "titles": [],
+  "bookIds": []
+}

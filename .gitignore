@@ -1,6 +1,15 @@
 # Playwright MCP scratch output (screenshots, snapshots, console logs)
 .playwright-mcp/
 
+# Personal Webnovel Scout data (preferences, library, history, outputs).
+# Committed *.example.* templates document the structure instead.
+scout/profile.md
+scout/config.json
+scout/data/kindle-library.json
+scout/data/dislikes.json
+scout/data/history.json
+scout/recommendations/
+
 # Temporary icon render preview
 icons/_preview.png
 

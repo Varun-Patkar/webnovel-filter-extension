@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "updatedAt": null,
+  "notes": "EXAMPLE template. Copy to scout/data/history.json (gitignored). Every bookId ever recommended is appended here so runs never repeat.",
+  "recommended": []
+}

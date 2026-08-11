@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "updatedAt": "YYYY-MM-DD",
+  "notes": "EXAMPLE template. Copy to scout/config.json (gitignored) and edit. No hard rating cutoff: rating/voters only up-weight ranking.",
+
+  "quality": {
+    "minChapters": 100,
+    "ratingIsHardGate": false,
+    "mtl": "neutral"
+  },
+
+  "likeFranchises": ["Marvel", "Naruto", "Your Favorites"],
+  "likeTropes": ["system", "leveling", "rebirth", "reincarnation", "villain", "overpowered"],
+  "originalHooks": [
+    "system / leveling / game-world",
+    "apocalypse / survival / global",
+    "villain / anti-hero / evil MC",
+    "reincarnation / transmigration into a world"
+  ],
+  "keep": ["slice of life", "comics"],
+
+  "discovery": {
+    "pageDepth": 5,
+    "fanficTags": [
+      { "name": "Marvel", "tagName": "marvel", "type": 4 },
+      { "name": "Naruto", "tagName": "naruto", "type": 4 }
+    ],
+    "tagOrders": [1, 2],
+    "searchKeywords": ["Marvel", "Naruto"],
+    "rankings": [
+      { "rankId": "power_rank", "rankName": "Power", "type": 4, "listType": 3, "timeType": 3, "sex": 1 },
+      { "rankId": "collection_rank", "rankName": "Collection", "type": 4, "listType": 3, "timeType": 3, "sex": 1 }
+    ]
+  },
+
+  "ranking": {
+    "weights": {
+      "franchiseMatch": 5,
+      "tropeMatch": 3,
+      "rating": 2,
+      "voters": 1,
+      "originalClickbait": 3,
+      "mtlPenalty": 0
+    },
+    "originalMinClickbaitToInclude": "high",
+    "signalHints": {
+      "note": "Add positive/negative keyword hints here to bias ranking toward or away from themes you love or hate."
+    }
+  }
+}
