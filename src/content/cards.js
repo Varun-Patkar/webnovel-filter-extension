@@ -216,6 +216,7 @@
     let items = [];
     if (/getTagBookList/.test(url)) items = d.items || [];
     else if (/getRankList/.test(url)) items = d.bookItems || [];
+    else if (/categoryAjax/.test(url)) items = d.items || [];
     else if (/search\/result/.test(url)) {
       items = []
         .concat((d.bookInfo && d.bookInfo.bookItems) || [])

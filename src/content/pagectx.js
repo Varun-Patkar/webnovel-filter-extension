@@ -1,7 +1,7 @@
 /**
  * pagectx.js
  * -----------
- * Detects which of the three supported Webnovel page types we are on and
+ * Detects which supported Webnovel page type we are on and
  * exposes the CSS selectors needed to (a) find the repeating "card" elements
  * that represent books and (b) find a stable anchor to inject the filter bar
  * above the first result.
@@ -10,6 +10,7 @@
  *   - Tag pages:     /tags/<slug>            (cards: ul.g_row > li.g_col)
  *   - Search pages:  /search?keywords=...    (cards: the visible result <ul> > li)
  *   - Ranking pages: /ranking/<type>/...     (cards: .j_rank_wrapper section.g_hr)
+ *   - Stories pages: /stories/<category>     (cards: .j_category_wrapper ul > li)
  */
 (function () {
   "use strict";
@@ -78,6 +79,15 @@
         type: "ranking",
         cardSelector: ".j_rank_wrapper section.g_hr",
         anchorSelector: ".j_rank_wrapper",
+        extractBookId,
+      };
+    }
+
+    if (path === "/stories" || path.startsWith("/stories/")) {
+      return {
+        type: "stories",
+        cardSelector: ".j_category_wrapper ul.clearfix > li",
+        anchorSelector: ".j_category_wrapper ul.clearfix",
         extractBookId,
       };
     }

@@ -350,3 +350,22 @@ html.wnf-wide.wnf-page-ranking .g_wrap.df {
   margin-right: auto !important;
   box-sizing: border-box;
 }
+
+/* --- Stories/category pages: the site keeps every card at 50%, even inside
+ *     the wide global wrapper. Pack the shared novel/comic/fanfic card layout
+ *     into as many readable columns as fit. --- */
+html.wnf-wide.wnf-page-stories .j_category_wrapper ul.clearfix {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  display: grid !important;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(420px, 100%), 1fr)
+  ) !important;
+  gap: 16px 24px !important;
+}
+html.wnf-wide.wnf-page-stories .j_category_wrapper ul.clearfix > li {
+  width: auto !important;
+  float: none !important;
+  padding: 8px 0 !important;
+}

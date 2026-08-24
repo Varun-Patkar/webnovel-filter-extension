@@ -4,9 +4,10 @@
  * Site-wide "wide mode" driver. Unlike the filter UI (which only runs on
  * tag/search/ranking pages), this tiny script is injected on EVERY Webnovel
  * page at document_start. It reads the persisted `wide` flag from
- * chrome.storage.local, toggles the `html.wnf-wide` class that wide.css keys
- * off, and watches for live changes from the toolbar popup — so flipping the
- * switch reflows every open Webnovel tab instantly without a reload.
+ * chrome.storage.local, marks the homepage for its dedicated layout rules,
+ * toggles the `html.wnf-wide` class that wide.css keys off, and watches for
+ * live changes from the toolbar popup — so flipping the switch reflows every
+ * open Webnovel tab instantly without a reload.
  *
  * It is intentionally self-contained (no dependency on the __WNF namespace or
  * the other content scripts) because it must load and act far earlier and on
@@ -14,6 +15,8 @@
  */
 (function () {
   "use strict";
+
+  document.documentElement.classList.toggle("wnf-home", location.pathname === "/");
 
   /**
    * Add or remove the wide-mode class on <html>.

@@ -2,9 +2,9 @@
  * nethook.js  —  runs in the MAIN world (see manifest `world: "MAIN"`)
  * ------------------------------------------------------------------
  * Patches `fetch` and `XMLHttpRequest` so we can read Webnovel's OWN list
- * responses (tag / search / ranking pages) and forward the per-book items to
- * the content script (isolated world) via `window.postMessage`. This lets the
- * extension enrich cards in bulk without making its own duplicate list calls.
+ * responses (tag / search / ranking / stories pages) and forward the per-book
+ * items to the content script (isolated world) via `window.postMessage`. This
+ * lets the extension enrich cards in bulk without duplicate list calls.
  *
  * It is strictly read-only: it never blocks, delays, or modifies requests or
  * responses — it only clones them to peek at the JSON. Runs at document_start
@@ -15,7 +15,8 @@
   if (window.__wnfNetHook) return;
   window.__wnfNetHook = true;
 
-  const MATCH = /\/go\/pcm\/(seo\/getTagBookList|search\/result|category\/getRankList)/;
+  const MATCH =
+    /\/go\/pcm\/(seo\/getTagBookList|search\/result|category\/(getRankList|categoryAjax))/;
 
   /** Forward a captured list payload to the content script. */
   function post(url, json) {

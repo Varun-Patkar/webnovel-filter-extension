@@ -3,7 +3,7 @@
 ## What this is
 
 A Manifest V3 Chrome extension (vanilla JS, **no build step**) that injects an
-advanced client-side filter UI into three Webnovel page types and widens the
+advanced client-side filter UI into four Webnovel page types and widens the
 layout. Pure frontend; runs entirely in the content-script context.
 
 ## Architecture
@@ -16,7 +16,7 @@ global but not lexical scope, so each file hangs its module off `__WNF`).
 |------|----------------|
 | `src/lib/queue.js` | Concurrency-limited task queue (`WNF.createQueue`). |
 | `src/content/store.js` | In-memory state: `meta` cache, tracked `cards`, `filters`, pub/sub. |
-| `src/content/pagectx.js` | Detect page type; per-type card/anchor selectors; `extractBookId`. |
+| `src/content/pagectx.js` | Detect tag/search/ranking/stories pages; per-type card/anchor selectors; `extractBookId`. |
 | `src/content/api.js` | `get-book-detail` fetch + normalization; read-status mapping. |
 | `src/content/cards.js` | Discover cards, enqueue enrichment, draw metadata badges. |
 | `src/content/filters.js` | Filter predicate + sort + counts. |
@@ -24,7 +24,7 @@ global but not lexical scope, so each file hangs its module off `__WNF`).
 | `src/content/taglazy.js` | Take-over lazy loader for tag pages (works around the site's broken renderer). |
 | `src/content/ui/panel.js` | Builds the bar/panel, owns the apply cycle. |
 | `src/content/main.js` | Orchestrator: detect → gate on `storage.enabled` → mount → scan → observe; supports live enable/disable teardown. |
-| `src/styles/panel.css` | Filter UI + badge + per-page wide-mode grid styles (namespaced `.wnf-*`; loads only on tag/search/ranking). |
+| `src/styles/panel.css` | Filter UI + badge + per-page wide-mode grid styles (namespaced `.wnf-*`; loads on tag/search/ranking/stories). |
 | `src/styles/wide.css` | Site-wide wide-mode overrides (capped 90vw); loads on all pages, gated by `html.wnf-wide`. |
 | `src/popup/popup.{html,css,js}` | Toolbar popup: master on/off switch (`storage.enabled`) + persisted **Wide layout** switch (`storage.wide`). |
 | `icons/icon-source.html` | SVG source; rendered to `icons/icon{16,48,128}.png`. |
@@ -37,10 +37,13 @@ general overrides everywhere, capped at 90vw (5vw margins): it widens Webnovel's
 standard fixed-width centered wrappers `.g_wrap` + `.g_row` (home, book detail,
 category, …) and the chapter reader column `#page.cha-page` + `.cha-page-in`, so
 no page overflows (verified live 2026-08 on home/book-detail/chapter). The
-filter pages additionally get per-page grid packing from `panel.css`, still
-scoped by the `wnf-page-{tag|search|ranking}` class `main.js` adds to `<html>`:
+homepage gets an `html.wnf-home` marker and caps its wide canvas at 1800px;
+eight-book shelves, ranking groups, and editorial columns use scoped grids so
+their fixed-width children do not cluster at the left on ultrawide displays.
+Filter pages additionally get per-page grid packing from `panel.css`, still
+scoped by the `wnf-page-{tag|search|ranking|stories}` class `main.js` adds to `<html>`:
 tag `.j_bookList` + `ul.g_row` grid; search `.ser-wrap` + `ul.j_result_wrap`
-grid; ranking `.g_wrap.df`. The `swapHref is not defined` EJS error some users see on tag
+grid; ranking `.g_wrap.df`; stories `.j_category_wrapper ul.clearfix`. The `swapHref is not defined` EJS error some users see on tag
 lazy-load is Webnovel's own bug (isolated-world content scripts cannot touch
 the site's template globals). We work around it in `taglazy.js`: on tag pages
 we fetch the next `getTagBookList` pages ourselves (novel=type1, fanfic=type4;
@@ -62,6 +65,9 @@ server-rendered (no API call); pages 2+ lazy-load.
   **No chapter count.**
 - **Ranking** `/category/getRankList?rankId=&rankName=&timeType=&type=4&listType=3&sex=1&signStatus=1&pageIndex=N`
   → `data.bookItems[]` (rankNo, amount=power value, mtl). **No chapter count.**
+- **Stories** `/category/categoryAjax?categoryId=&categoryType=&sourceType=&bookStatus=&orderBy=&pageIndex=N`
+  → `data.items[]` has bookId, chapterNum, totalScore, tagInfo[], categoryName,
+  and inLibrary. Page 1 is server-rendered; pages 2+ load on scroll.
 - **Per-book (used for enrichment)** `/book/get-book-detail?bookId=<id>`
   → `data.bookInfo`: `totalChapterNum`, `totalScore`, `voters`, `pvNum` (views),
   `updateTime`, `actionStatus`, `inLibrary`, `tagInfos[]`, `categoryName`;

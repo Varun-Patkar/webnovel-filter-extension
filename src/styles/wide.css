@@ -14,10 +14,9 @@
  * with an inner `.cha-page-in`), so it gets a dedicated rule. Verified live
  * against the 2026-08 markup on home, book-detail and chapter pages.
  *
- * Page-type-specific grid packing for the filter pages (tag/search/ranking)
- * lives in panel.css, which only loads on those pages and whose more specific
- * selectors win over the generic rules below; this file handles everything
- * else site-wide.
+ * Page-type-specific grid packing for the filter pages lives in panel.css,
+ * which only loads on those pages and whose more specific selectors win over
+ * the generic rules below; this file handles everything else site-wide.
  */
 
 /* Generic fixed-width content wrappers — the common case across the site. */
@@ -28,6 +27,59 @@ html.wnf-wide .g_row {
   margin-left: auto !important;
   margin-right: auto !important;
   box-sizing: border-box !important;
+}
+
+/* Homepage modules still use fixed-width floated columns after their wrappers
+ * widen. Cap the canvas at a readable ultrawide width and distribute the
+ * existing modules across it instead of leaving them clustered on the left. */
+html.wnf-wide.wnf-home .g_wrap,
+html.wnf-wide.wnf-home .g_row {
+  width: min(90vw, 1800px) !important;
+  max-width: 1800px !important;
+}
+
+html.wnf-wide.wnf-home .g_row.mb48,
+html.wnf-wide.wnf-home .g_row.mb12.m-7005-bd,
+html.wnf-wide.wnf-home .g_row.create-wrap {
+  display: grid !important;
+  gap: 28px !important;
+}
+
+html.wnf-wide.wnf-home .g_row.mb48 {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+html.wnf-wide.wnf-home .g_row.mb12.m-7005-bd,
+html.wnf-wide.wnf-home .g_row.create-wrap {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+html.wnf-wide.wnf-home div.g_row._8 {
+  display: grid !important;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 3fr) !important;
+  gap: 28px !important;
+}
+
+html.wnf-wide.wnf-home .g_row.mb48 > .g_col,
+html.wnf-wide.wnf-home .g_row.mb12.m-7005-bd > .g_col,
+html.wnf-wide.wnf-home .g_row.create-wrap > .g_col,
+html.wnf-wide.wnf-home div.g_row._8 > .g_col {
+  width: auto !important;
+  float: none !important;
+}
+
+html.wnf-wide.wnf-home ul.g_row._8._switch_target:not(.mb12) {
+  display: grid !important;
+  grid-template-columns: repeat(8, minmax(105px, 1fr)) !important;
+  gap: 20px !important;
+}
+
+html.wnf-wide.wnf-home ul.g_row._8._switch_target:not(.mb12) > li.g_col._1 {
+  width: 105px !important;
+  float: none !important;
+  justify-self: center !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 
 /* Chapter reader — widen the reading column (and its inner shell) so the story
