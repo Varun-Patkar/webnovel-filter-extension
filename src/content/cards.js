@@ -241,9 +241,11 @@
   }
 
   /**
-   * Scan the DOM for card elements, register new ones, and enrich them.
-   * Idempotent — safe to call repeatedly.
-   * @returns {number} count of newly discovered cards
+   * Scan the DOM for card elements, register new ones (deduplicating by
+   * bookId), and enrich them. Idempotent — safe to call repeatedly.
+   * If the same bookId already has a tracked card, the duplicate element is
+   * untracked and removed so it never appears in filter results.
+   * @returns {number} count of newly discovered (non-duplicate) cards
    */
   function scan() {
     const page = store.page;
@@ -251,9 +253,19 @@
     const els = document.querySelectorAll(page.cardSelector);
     let added = 0;
     els.forEach((el) => {
+      // Skip elements we have already processed.
       if (el.dataset.wnfTracked === "1") return;
       const bookId = page.extractBookId(el);
       if (!bookId) return;
+
+      // --- deduplicate by bookId: keep first, discard later duplicates ---
+      if (store.cards.some((c) => c.bookId === bookId)) {
+        el.removeAttribute("data-wnf-tracked");
+        el.removeAttribute("data-wnf-book-id");
+        el.remove(); // remove the stray duplicate card from the DOM
+        return;
+      }
+
       el.dataset.wnfTracked = "1";
       el.dataset.wnfBookId = bookId;
       store.cards.push({ el, bookId });
